@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
 </head>
+
 <body>
   <h1>방 목록</h1>
-  
+
   <!-- 방 생성 버튼 -->
   <button id="createRoomButton">방 만들기</button>
-  
+
   <!-- 방 목록 -->
   <ul id="roomList"></ul>
 
   <!-- 방 생성 팝업 -->
-  <div id="roomPopup" style="display: none; border: 1px solid black; padding: 10px; width: 300px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white;">
+  <div id="roomPopup"
+    style="display: none; border: 1px solid black; padding: 10px; width: 300px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white;">
     <label for="roomTitle">방 제목:</label>
     <input type="text" id="roomTitle" placeholder="방 제목 입력">
     <button id="createRoomConfirm">생성</button>
@@ -78,6 +81,10 @@
       }
     });
 
+    socket.on('roomCreated', (roomId) => {
+      window.location.href = `/room.html?roomId=${roomId}`;
+    });
+
     // 로그아웃 버튼 처리
     logoutButton.addEventListener('click', () => {
       localStorage.removeItem('token');
@@ -88,4 +95,5 @@
     socket.emit('getRooms');
   </script>
 </body>
+
 </html>

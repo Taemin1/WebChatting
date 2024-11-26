@@ -91,6 +91,7 @@ io.on('connection', (socket) => {
   socket.on('createRoom', (roomTitle) => {
     const newRoom = { title: roomTitle, users: 0, maxUsers: 3, id: rooms.length + 1 };
     rooms.push(newRoom);
+    socket.emit('roomCreated', newRoom.id);
     io.emit('updateRooms', rooms); // 모든 사용자에게 방 목록 업데이트
   });
 
