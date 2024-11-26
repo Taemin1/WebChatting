@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room</title>
+</head>
+<body>
+  <h2>화상 회의</h2>
+  <div id="video-container"></div>
+  <input type="text" id="messageInput" placeholder="메시지 입력">
+  <button id="sendMessageButton">전송</button>
+  <ul id="chatMessages"></ul>
+  <button id="toggleCamera">카메라 켜기/끄기</button>
+  <button id="toggleMic">마이크 켜기/끄기</button>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/room.js"></script>
+</body>
+</html>

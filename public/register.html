@@ -1,0 +1,23 @@
+<!-- public/register.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+</head>
+<body>
+  <h2>회원가입</h2>
+  <form id="registerForm">
+    <input type="text" id="registerId" placeholder="ID" required>
+    <button type="button" id="checkIdButton">ID 중복 체크</button>
+    <br>
+    <input type="password" id="registerPassword1" placeholder="Password" required>
+    <input type="password" id="registerPassword2" placeholder="Confirm Password" onblur="checkPasswordMatch()" required>
+    <button type="submit" id="registerSubmitButton" disabled>회원가입</button>
+  </form>
+  <p id="registerMessage"></p>
+  
+  <script src="register.js"></script>
+</body>
+</html>

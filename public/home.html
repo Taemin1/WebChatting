@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+</head>
+<body>
+  <h1>방 목록</h1>
+  
+  <!-- 방 생성 버튼 -->
+  <button id="createRoomButton">방 만들기</button>
+  
+  <!-- 방 목록 -->
+  <ul id="roomList"></ul>
+
+  <!-- 방 생성 팝업 -->
+  <div id="roomPopup" style="display: none; border: 1px solid black; padding: 10px; width: 300px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white;">
+    <label for="roomTitle">방 제목:</label>
+    <input type="text" id="roomTitle" placeholder="방 제목 입력">
+    <button id="createRoomConfirm">생성</button>
+    <button id="closePopup">취소</button>
+  </div>
+
+  <!-- 로그아웃 버튼 -->
+  <button id="logoutButton">로그아웃</button>
+  <script src="home.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // DOM Elements
+    const roomList = document.getElementById('roomList');
+    const createRoomButton = document.getElementById('createRoomButton');
+    const roomPopup = document.getElementById('roomPopup');
+    const roomTitleInput = document.getElementById('roomTitle');
+    const createRoomConfirm = document.getElementById('createRoomConfirm');
+    const closePopup = document.getElementById('closePopup');
+    const logoutButton = document.getElementById('logoutButton');
+
+    // 방 목록 업데이트
+    socket.on('updateRooms', (rooms) => {
+      roomList.innerHTML = '';
+      rooms.forEach((room) => {
+        const li = document.createElement('li');
+        li.textContent = `${room.title} (인원: ${room.users}/${room.maxUsers})`;
+
+        const joinButton = document.createElement('button');
+        joinButton.textContent = '입장';
+        joinButton.disabled = room.users >= room.maxUsers;
+        joinButton.addEventListener('click', () => {
+          window.location.href = `/room.html?roomId=${room.id}`;
+        });
+
+        li.appendChild(joinButton);
+        roomList.appendChild(li);
+      });
+    });
+
+    // 방 생성 팝업 열기
+    createRoomButton.addEventListener('click', () => {
+      roomPopup.style.display = 'block';
+    });
+
+    // 방 생성 취소
+    closePopup.addEventListener('click', () => {
+      roomPopup.style.display = 'none';
+      roomTitleInput.value = '';
+    });
+
+    // 방 생성 확인
+    createRoomConfirm.addEventListener('click', () => {
+      const roomTitle = roomTitleInput.value.trim();
+      if (roomTitle) {
+        socket.emit('createRoom', roomTitle);
+        roomPopup.style.display = 'none';
+        roomTitleInput.value = '';
+      }
+    });
+
+    // 로그아웃 버튼 처리
+    logoutButton.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      window.location.href = '/login.html';
+    });
+
+    // 페이지 로드 시 방 목록 요청
+    socket.emit('getRooms');
+  </script>
+</body>
+</html>
